@@ -6,14 +6,14 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
     <%= render 'layouts/shim' %>
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,600,700' rel='stylesheet' type='text/css'>
+    <%= stylesheet_link_tag "application", 'https://fonts.googleapis.com/css?family=Roboto:400,500,600', :media => "all" %>
   </head>
 
   <body>
     <div class="container">
       <%= render 'layouts/header' %>
       <% flash.each do |type, msg| %>
-        <%= content_tag(:div, msg, class: "alert alert-#{type}") %>
+      <%= content_tag(:div, msg, class: "alert alert-#{type}") %>
       <% end %>
       <%= yield %>
       <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
