@@ -10,8 +10,8 @@ class PostsController < ApplicationController
   end
 
   def create
-    user = current_user
-    @post = user.posts.new(post_params)
+    @post = Post.new(post_params)
+    @post.user_id = current_user.id
     if @post.save
       flash[:success] = 'Your post was created!'
       redirect_to root_path

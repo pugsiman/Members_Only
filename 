@@ -1,0 +1,89 @@
+[1mdiff --git a/app/controllers/posts_controller.rb b/app/controllers/posts_controller.rb[m
+[1mindex 0cae44b..29499b7 100644[m
+[1m--- a/app/controllers/posts_controller.rb[m
+[1m+++ b/app/controllers/posts_controller.rb[m
+[36m@@ -10,8 +10,8 @@[m [mclass PostsController < ApplicationController[m
+   end[m
+ [m
+   def create[m
+[31m-    user = current_user[m
+[31m-    @post = user.posts.new(post_params)[m
+[32m+[m[32m    @post = Post.new(post_params)[m
+[32m+[m[32m    @post.user_id = current_user.id[m
+     if @post.save[m
+       flash[:success] = 'Your post was created!'[m
+       redirect_to root_path[m
+[1mdiff --git a/app/helpers/sessions_helper.rb b/app/helpers/sessions_helper.rb[m
+[1mindex 1816dee..5f59d3e 100644[m
+[1m--- a/app/helpers/sessions_helper.rb[m
+[1m+++ b/app/helpers/sessions_helper.rb[m
+[36m@@ -3,17 +3,17 @@[m [mmodule SessionsHelper[m
+     remember_token = User.create_token[m
+     cookies.permanent[:remember_token] = remember_token[m
+     user.update_attribute(:remember_token, User.digest(remember_token))[m
+[31m-    self.current_user = user[m
+[32m+[m[32m    @current_user = user[m
+   end[m
+ [m
+   def log_out[m
+     cookies.delete(:remember_token)[m
+[31m-    self.current_user = nil[m
+[32m+[m[32m    @current_user = nil[m
+   end[m
+ [m
+   def current_user[m
+[31m-    token = User.digest(cookies.permanent[:remember_token])[m
+[31m-    @current_user ||= User.find_by(remember_token: token)[m
+[32m+[m[32m    remember_token = User.digest(cookies[:remember_token])[m
+[32m+[m[32m    @current_user ||= User.find_by(remember_token: remember_token)[m
+   end[m
+ [m
+   def current_user?(user)[m
+[1mdiff --git a/app/views/posts/index.html.erb b/app/views/posts/index.html.erb[m
+[1mindex 6166b78..27fe664 100644[m
+[1m--- a/app/views/posts/index.html.erb[m
+[1m+++ b/app/views/posts/index.html.erb[m
+[36m@@ -3,7 +3,7 @@[m
+   <h2><%= post.title %></h2>[m
+   <p><%= post.body %></p>[m
+   <% if logged_in? %>[m
+[31m-    <p><small>Posted by: <%= post.user %></small></p>[m
+[32m+[m[32m    <p><small>Posted by: <%= post.user.name %></small></p>[m
+   <% end %>[m
+   <br>[m
+ <% end %>[m
+[1mdiff --git a/db/migrate/20151203230330_add_foreign_key_to_posts.rb b/db/migrate/20151203230330_add_foreign_key_to_posts.rb[m
+[1mdeleted file mode 100644[m
+[1mindex 9134649..0000000[m
+[1m--- a/db/migrate/20151203230330_add_foreign_key_to_posts.rb[m
+[1m+++ /dev/null[m
+[36m@@ -1,5 +0,0 @@[m
+[31m-class AddForeignKeyToPosts < ActiveRecord::Migration[m
+[31m-  def change[m
+[31m-    add_column :posts, :user_id, :integer[m
+[31m-  end[m
+[31m-end[m
+[1mdiff --git a/db/schema.rb b/db/schema.rb[m
+[1mindex ce8bf07..8d704af 100644[m
+[1m--- a/db/schema.rb[m
+[1m+++ b/db/schema.rb[m
+[36m@@ -11,7 +11,7 @@[m
+ #[m
+ # It's strongly recommended that you check this file into your version control system.[m
+ [m
+[31m-ActiveRecord::Schema.define(version: 20151203230330) do[m
+[32m+[m[32mActiveRecord::Schema.define(version: 20151204002257) do[m
+ [m
+   create_table "posts", force: :cascade do |t|[m
+     t.string   "title"[m
+[36m@@ -21,6 +21,8 @@[m [mActiveRecord::Schema.define(version: 20151203230330) do[m
+     t.integer  "user_id"[m
+   end[m
+ [m
+[32m+[m[32m  add_index "posts", ["user_id"], name: "index_posts_on_user_id"[m
+[32m+[m
+   create_table "users", force: :cascade do |t|[m
+     t.datetime "created_at",      null: false[m
+     t.datetime "updated_at",      null: false[m
+warning: LF will be replaced by CRLF in app/controllers/posts_controller.rb.
+The file will have its original line endings in your working directory.
