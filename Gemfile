@@ -1,11 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'rails', '4.2.5'
-gem 'sqlite3'
 gem 'sass-rails', '~> 5.0'
 gem 'bootstrap-sass'
-gem 'will_paginate'
-gem 'bootstrap-will_paginate'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
@@ -16,10 +13,14 @@ gem 'bcrypt', '~> 3.1.7'
 
 group :development, :test do
   gem 'byebug'
+  gem 'sqlite3'
+  gem 'web-console', '~> 2.0'
 end
 
-group :development do
-  gem 'web-console', '~> 2.0'
+group :production do
+  gem 'pg'
+  gem 'rails_12factor'
+  gem 'puma'
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

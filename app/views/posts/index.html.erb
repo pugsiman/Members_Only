@@ -1,9 +1,13 @@
 
 <% @posts.each do |post| %>
-  <h2><%= post.title %></h2>
-  <p><%= post.body %></p>
+  <div class="post">
+  <h1><%= post.title %></h2>
+  <div class="content"><%= post.body %></div>
+  Posted by:
   <% if logged_in? %>
-    <p><small>Posted by: <%= post.user.name %></small></p>
+    <%= post.user.name %>
+  <% else %>
+    <%= link_to "Log in", login_path %> to see who posted this.
   <% end %>
-  <br>
+</div>
 <% end %>

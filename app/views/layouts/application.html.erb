@@ -5,24 +5,19 @@
     <title>Members Only</title>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
+    <%= render 'layouts/shim' %>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,600,700' rel='stylesheet' type='text/css'>
   </head>
 
   <body>
-    <% flash.each do |type, msg| %>
-      <%= content_tag(:div, msg, class: "alert alert-#{type}") %>
-    <% end %>
-
-    <%= link_to "Home", root_path %>
-    <% if logged_in? %>
-      <%= link_to "Create post", new_post_path %>
-      <%= link_to "Logout", logout_path, method: :delete %> (<%= @current_user.name %>)
-    <% else %>
-      <%= link_to "Login", login_path %>
-    <% end %>
-
-    <%= yield %>
-
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    <%= debug(params) if Rails.env.development? %>
+    <div class="container">
+      <%= render 'layouts/header' %>
+      <% flash.each do |type, msg| %>
+        <%= content_tag(:div, msg, class: "alert alert-#{type}") %>
+      <% end %>
+      <%= yield %>
+      <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+      <%= debug(params) if Rails.env.development? %>
+    </div>
   </body>
 </html>
